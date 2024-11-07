@@ -1,0 +1,26 @@
+{
+  "name": "smtp-stub",
+  "version": "0.0.1",
+  "description": "SMTP server stub",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsc && node dist/main.js",
+    "biome:check": "biome check src/",
+    "publish": "npm publish",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^5.1.0",
+    "mailparser": "3.7.1",
+    "smtp-server": "3.13.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/mailparser": "3.4.5",
+    "@types/smtp-server": "3.5.10",
+    "typescript": "5.6.3"
+  }
+}
