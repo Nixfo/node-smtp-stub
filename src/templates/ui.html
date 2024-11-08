@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <style>
+        </style>
+    </head>
+
+    <body>
+        <h1>Inbox</h1>
+        <% if (it.emails.length === 0) { %>
+            No email
+        <% } %>
+
+        <% it.emails.forEach(function(email) { %>
+            From : <%~ email.from.html %>
+            To : <%~ email.to.html %>
+            <%~ email.html %>
+        <% }) %>
+    </body>
+</html>
