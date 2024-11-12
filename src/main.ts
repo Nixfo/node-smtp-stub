@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { ParsedMail, simpleParser } from 'mailparser';
 import { SMTPServer } from 'smtp-server';
 import { launchWebServer } from './web-server.js';

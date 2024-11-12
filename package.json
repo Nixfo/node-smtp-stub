@@ -14,10 +14,13 @@
     "type": "git",
     "url": "https://github.com/Nixfo/node-smtp-stub.git"
   },
+  "bin": {
+    "fake-smtp-server": "./main.js"
+  },
   "scripts": {
-    "start": "tsc && copyfiles -u 1 src/templates/**/* dist/ && node dist/main.js",
+    "build": "tsc && copyfiles -u 1 src/templates/**/* dist/ && copyfiles package.json dist/",
+    "start": "npm run build && node dist/main.js",
     "biome:check": "biome check src/",
-    "publish": "npm publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

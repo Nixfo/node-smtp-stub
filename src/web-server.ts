@@ -1,9 +1,9 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import fastifyView from '@fastify/view';
 import { Eta } from 'eta';
 import Fastify from 'fastify';
 import { emails } from './main.js';
-import { fileURLToPath } from 'node:url';
 
 // Get the current directory with ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -21,12 +21,11 @@ export async function launchWebServer(port: number, host: string) {
         templates: path.join(__dirname, 'templates'),
     });
 
-    // Declare a route
     fastify.get('/', function handler(_request, reply) {
         return reply.viewAsync('ui.html', { emails });
     });
 
-    fastify.delete('/', async function handler(_request, _reply) {
+    fastify.delete('/', function handler(_request, _reply) {
         emails.length = 0;
     });
 
