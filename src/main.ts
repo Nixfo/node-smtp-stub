@@ -3,8 +3,6 @@ import { ParsedMail, simpleParser } from 'mailparser';
 import { SMTPServer } from 'smtp-server';
 import { launchWebServer } from './web-server.js';
 
-console.log('Running');
-
 export const emails: ParsedMail[] = [];
 
 const smtpServer = new SMTPServer({
@@ -33,5 +31,5 @@ smtpServer.on('error', (err) => {
     console.error(err);
 });
 
-smtpServer.listen(1025, 'localhost');
-launchWebServer(1024, 'localhost');
+smtpServer.listen(1025, '0.0.0.0');
+launchWebServer(1024, '0.0.0.0');
