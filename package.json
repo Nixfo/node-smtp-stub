@@ -1,9 +1,9 @@
 {
   "name": "@nixfo/smtp-stub",
-  "version": "0.0.2",
+  "version": "0.0.4-cjs",
   "description": "SMTP server stub",
   "main": "index.js",
-  "type": "module",
+  "types": "index.ts",
   "author": "Nixfo",
   "license": "ISC",
   "homepage": "https://github.com/Nixfo/node-smtp-stub",

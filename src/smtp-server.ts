@@ -1,6 +1,6 @@
 import { simpleParser } from 'mailparser';
 import { SMTPServer } from 'smtp-server';
-import { emails } from './main.js';
+import { pushEmails } from './main';
 
 export function launchSmtpStubServer(port: number, host: string) {
     const smtpServer = new SMTPServer({
@@ -16,7 +16,7 @@ export function launchSmtpStubServer(port: number, host: string) {
             simpleParser(stream)
                 .then((email) => {
                     console.log(`Received email ${email.html}`);
-                    emails.push(email);
+                    pushEmails(email);
                     callback();
                 }, callback)
                 .catch((e) => {

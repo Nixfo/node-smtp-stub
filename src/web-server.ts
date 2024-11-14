@@ -1,13 +1,12 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import fastifyView from '@fastify/view';
 import { Eta } from 'eta';
 import Fastify from 'fastify';
-import { emails } from './main.js';
+import { getEmails, resetEmails } from './main';
 
 // Get the current directory with ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 export async function launchWebServer(port: number, host: string) {
     const fastify = Fastify({
@@ -22,11 +21,11 @@ export async function launchWebServer(port: number, host: string) {
     });
 
     fastify.get('/', async function handler(_request, reply) {
-        return reply.viewAsync('ui.html', { emails });
+        return reply.viewAsync('ui.html', { emails: getEmails() });
     });
 
     fastify.delete('/', async function handler(_request, _reply) {
-        emails.length = 0;
+        resetEmails();
     });
 
     try {
