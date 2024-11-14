@@ -1,6 +1,6 @@
 import * as nodemailer from 'nodemailer';
-import { expect, test } from 'vitest';
-import { emails } from './main.js';
+import { describe, expect, test } from 'vitest';
+import { SmtpStubBuilder, SmtpStubServer } from '.';
 
 const transporter = nodemailer.createTransport({
     host: '0.0.0.0',
@@ -25,18 +25,22 @@ async function sendMail() {
     });
 }
 
-test('sending an mail', async () => {
-    await sendMail().catch(console.error);
+describe('SmtpStubServer with web server', () => {
+    const smtpStub: SmtpStubServer = new SmtpStubBuilder(1025, '0.0.0.0').withWebServer(1024, '0.0.0.0').build();
 
-    expect(emails).length(1);
-});
+    test('sending an mail', async () => {
+        await sendMail().catch(console.error);
 
-test('delete an email', async () => {
-    await sendMail().catch(console.error);
-
-    await fetch('http://localhost:1024', {
-        method: 'DELETE',
+        expect(smtpStub.emails).length(1);
     });
 
-    expect(emails).length(0);
+    test('delete an email', async () => {
+        await sendMail().catch(console.error);
+
+        await fetch('http://localhost:1024', {
+            method: 'DELETE',
+        });
+
+        expect(smtpStub.emails).length(0);
+    });
 });
