@@ -1,6 +1,6 @@
 {
   "name": "@nixfo/smtp-stub",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "SMTP server stub",
   "main": "index.js",
   "type": "module",
