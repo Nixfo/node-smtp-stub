@@ -27,5 +27,10 @@ const smtpStub =
 
 Check the result
 ```ts
-expect(smtbStub.emails.length).toBe(1);
+expect(smtpStub.emails.length).toBe(1);
+```
+
+If you want to close the servers
+```ts
+smtpStub.close();
 ```

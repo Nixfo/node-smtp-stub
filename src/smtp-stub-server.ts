@@ -1,15 +1,18 @@
 import path from 'node:path';
 import fastifyView from '@fastify/view';
 import { Eta } from 'eta';
-import Fastify from 'fastify';
+import Fastify, { FastifyInstance } from 'fastify';
 import { ParsedMail, simpleParser } from 'mailparser';
 import { SMTPServer } from 'smtp-server';
 
 export class SmtpStubServer {
     readonly emails: ParsedMail[] = [];
 
+    private smtpServer: SMTPServer;
+    private fastifyWebServer: FastifyInstance | undefined;
+
     constructor(port: number, host: string) {
-        const smtpServer = new SMTPServer({
+        this.smtpServer = new SMTPServer({
             authOptional: true,
             onAuth: (auth, _session, callback) => {
                 console.info(`Received auth from ${auth.username}`);
@@ -31,39 +34,44 @@ export class SmtpStubServer {
             },
         });
 
-        smtpServer.on('error', (err) => {
+        this.smtpServer.on('error', (err) => {
             console.error(err);
         });
 
-        smtpServer.listen(port, host);
+        this.smtpServer.listen(port, host);
     }
 
-    async launchWebServer(port: number, host: string) {
-        const fastify = Fastify({
+    async launchWebServer(port: number, host: string): Promise<void> {
+        this.fastifyWebServer = Fastify({
             logger: true,
         });
 
-        fastify.register(fastifyView, {
+        this.fastifyWebServer.register(fastifyView, {
             engine: {
                 eta: new Eta(),
             },
             templates: path.join(__dirname, 'templates'),
         });
 
-        fastify.get('/', async (_request, reply) => {
+        this.fastifyWebServer.get('/', async (_request, reply) => {
             return reply.viewAsync('ui.html', { emails: this.emails });
         });
 
-        fastify.delete('/', async (_request, _reply) => {
+        this.fastifyWebServer.delete('/', async (_request, _reply) => {
             this.emails.length = 0;
         });
 
         try {
-            await fastify.listen({ host, port });
+            await this.fastifyWebServer.listen({ host, port });
         } catch (err) {
-            fastify.log.error(err);
+            this.fastifyWebServer.log.error(err);
             process.exit(1);
         }
+    }
+
+    close(): void {
+        this.smtpServer.close();
+        this.fastifyWebServer?.close();
     }
 }
 

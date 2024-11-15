@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer';
-import { describe, expect, test } from 'vitest';
+import { afterAll, describe, expect, test } from 'vitest';
 import { SmtpStubBuilder, SmtpStubServer } from '.';
 
 const transporter = nodemailer.createTransport({
@@ -27,6 +27,10 @@ async function sendMail() {
 
 describe('SmtpStubServer with web server', () => {
     const smtpStub: SmtpStubServer = new SmtpStubBuilder(1025, '0.0.0.0').withWebServer(1024, '0.0.0.0').build();
+
+    afterAll(() => {
+        smtpStub.close();
+    });
 
     test('sending an mail', async () => {
         await sendMail().catch(console.error);
